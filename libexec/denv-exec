@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+# Provide denv completions
+if [ "$1" = "--complete" ]; then
+  exec denv shims --short
+fi
+
+DENV_COMMAND="$1"
+if [ -z "$DENV_COMMAND" ]; then
+  echo "usage: denv exec COMMAND [arg1 arg2...]" >&2
+  exit 1
+fi
+
+DENV_COMMAND_PATH="$(denv-which "$DENV_COMMAND")"
+DENV_BIN_PATH="${DENV_COMMAND_PATH%/*}"
+
+for script in $(denv-hooks exec); do
+  source "$script"
+done
+
+shift 1
+export PATH="${DENV_BIN_PATH}:${PATH}"
+exec -a "$DENV_COMMAND" "$DENV_COMMAND_PATH" "$@"

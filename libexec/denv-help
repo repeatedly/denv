@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+print_set_version() {
+  echo "<version> should be a string matching a D version known by denv."
+
+  local versions="$(denv-versions --bare)"
+  if [ -z "$versions" ]; then
+    echo "There are currently no D versions installed for denv."
+  else
+    echo "The currently installed D versions are:"
+    echo "$versions" | sed 's/^/  /'
+  fi
+
+  echo
+  echo "The special version string 'system' will use your default system D."
+}
+
+case "$1" in
+"") echo "usage: denv <command> [<args>]
+
+Some useful denv commands are:
+   commands      List all denv commands
+   rehash        Rehash denv shims (run this after installing binaries)
+   global        Set or show the global D version
+   local         Set or show the local directory-specific D version
+   shell         Set or show the shell-specific D version
+   version       Show the current D version
+   versions      List all D versions known by denv
+   which         Show the full path for the given D command
+   whence        List all D versions with the given command
+
+See 'denv help <command>' for information on a specific command.
+For full documentation, see: https://github.com/sstephenson/denv#readme"
+;;
+commands) echo "usage: denv commands
+       denv commands --sh
+       denv commands --no-sh
+
+List all denv commands."
+;;
+global) echo "usage: denv global <version>
+
+Sets the global D version. You can override the global version at
+any time by setting a directory-specific version with \`denv local'
+or by setting the DENV_VERSION environment variable.
+
+$(print_set_version)"
+;;
+local) echo "usage: denv local <version>
+       denv local --unset
+
+Sets the local directory-specific D version by writing the version
+name to a file named '.denv-version'.
+
+When you run a D command, denv will look for an '.denv-version'
+file in the current directory and each parent directory. If no such
+file is found in the tree, denv will use the global D version
+specified with \`denv global', or the version specified in the
+DENV_VERSION environment variable.
+
+$(print_set_version)"
+;;
+shell) echo "usage: denv shell <version>
+       denv shell --unset
+
+Sets a shell-specific D version by setting the 'DENV_VERSION'
+environment variable in your shell. This version overrides both
+project-specific versions and the global version.
+
+$(print_set_version)"
+;;
+versions) echo "usage: denv versions
+       denv versions --bare
+
+Lists all D versions known by denv."
+;;
+which) echo "usage: denv which <command>
+
+Displays the full path to the binary that denv will execute when you
+run the given command."
+;;
+whence) echo "usage: denv whence <command>
+
+Lists all D versions with the given command installed."
+;;
+*)
+  command_path="$(command -v "denv-$1" || true)"
+  if [ -n "$command_path" ]; then
+    echo "Sorry, the \`$1' command isn't documented yet."
+    echo
+    echo "You can view the command's source here:"
+    echo "$command_path"
+    echo
+  else
+    echo "denv: no such command \`$1'"
+  fi
+esac

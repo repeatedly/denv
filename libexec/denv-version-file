@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+root="$DENV_DIR"
+while [ -n "$root" ]; do
+  if [ -e "${root}/.denv-version" ]; then
+    echo "${root}/.denv-version"
+    exit
+  fi
+  root="${root%/*}"
+done
+
+global_version_file="${DENV_ROOT}/version"
+
+if [ -e "$global_version_file" ]; then
+  echo "$global_version_file"
+elif [ -e "${DENV_ROOT}/global" ]; then
+  echo "${DENV_ROOT}/global"
+elif [ -e "${DENV_ROOT}/default" ]; then
+  echo "${DENV_ROOT}/default"
+else
+  echo "$global_version_file"
+fi

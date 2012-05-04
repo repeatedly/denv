@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+# Provide denv completions
+if [ "$1" = "--complete" ]; then
+  echo system
+  exec denv-versions --bare
+fi
+
+DENV_VERSION="$1"
+DENV_VERSION_FILE="${DENV_ROOT}/version"
+
+if [ -n "$DENV_VERSION" ]; then
+  denv-version-file-write "$DENV_VERSION_FILE" "$DENV_VERSION"
+else
+  denv-version-file-read "$DENV_VERSION_FILE" ||
+  denv-version-file-read "${DENV_ROOT}/global" ||
+  denv-version-file-read "${DENV_ROOT}/default" ||
+  echo system
+fi

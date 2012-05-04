@@ -1,0 +1,75 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+resolve_link() {
+  $(type -p greadlink readlink | head -1) "$1"
+}
+
+abs_dirname() {
+  local cwd="$(pwd)"
+  local path="$1"
+
+  while [ -n "$path" ]; do
+    cd "${path%/*}"
+    local name="${path##*/}"
+    path="$(resolve_link "$name" || true)"
+  done
+
+  pwd
+  cd "$cwd"
+}
+
+if [ -z "${DENV_ROOT}" ]; then
+  DENV_ROOT="${HOME}/.denv"
+else
+  DENV_ROOT="${DENV_ROOT%/}"
+fi
+export DENV_ROOT
+
+if [ -z "${DENV_DIR}" ]; then
+  DENV_DIR="$(pwd)"
+else
+  cd "$DENV_DIR" 2>/dev/null || {
+    echo "denv: cannot change working directory to \`$DENV_DIR'"
+    exit 1
+  } >&2
+  DENV_DIR="$(pwd)"
+  cd "$OLDPWD"
+fi
+export DENV_DIR
+
+
+shopt -s nullglob
+
+bin_path="$(abs_dirname "$0")"
+for plugin_bin in "${DENV_ROOT}/plugins/"*/bin; do
+  bin_path="${bin_path}:${plugin_bin}"
+done
+export PATH="${bin_path}:${PATH}"
+
+hook_path="${DENV_HOOK_PATH}:${DENV_ROOT}/denv.d:/usr/local/etc/denv.d:/etc/denv.d:/usr/lib/denv/hooks"
+for plugin_hook in "${DENV_ROOT}/plugins/"*/etc/denv.d; do
+  hook_path="${hook_path}:${plugin_hook}"
+done
+export DENV_HOOK_PATH="$hook_path"
+
+shopt -u nullglob
+
+
+command="$1"
+case "$command" in
+"" | "-h" | "--help" )
+  echo -e "denv 0.3.0\n$(denv-help)" >&2
+  ;;
+* )
+  command_path="$(command -v "denv-$command" || true)"
+  if [ -z "$command_path" ]; then
+    echo "denv: no such command \`$command'" >&2
+    exit 1
+  fi
+
+  shift 1
+  exec "$command_path" "$@"
+  ;;
+esac

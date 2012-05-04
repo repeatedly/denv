@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+# Provide denv completions
+if [ "$1" = "--complete" ]; then
+  exec denv shims --short
+fi
+
+expand_path() {
+  if [ ! -d "$1" ]; then
+    return 1
+  fi
+
+  local cwd="$(pwd)"
+  cd "$1"
+  pwd
+  cd "$cwd"
+}
+
+remove_from_path() {
+  local path_to_remove="$(expand_path "$1")"
+  local result=""
+
+  if [ -z "$path_to_remove" ]; then
+    echo "${PATH}"
+    return
+  fi
+
+  local paths
+  IFS=: paths=($PATH)
+
+  for path in "${paths[@]}"; do
+    path="$(expand_path "$path" || true)"
+    if [ -n "$path" ] && [ "$path" != "$path_to_remove" ]; then
+      result="${result}${path}:"
+    fi
+  done
+
+  echo "${result%:}"
+}
+
+DENV_VERSION="$(denv-version-name)"
+DENV_COMMAND="$1"
+
+if [ -z "$DENV_COMMAND" ]; then
+  echo "usage: denv which COMMAND" >&2
+  exit 1
+fi
+
+if [ `uname` = "Darwin" ]; then
+  DENV_ENV_PATH="osx"
+elif [ `uname` = "Linux" ]; then
+  DENV_ENV_PATH="linux"
+fi
+
+if [ "$DENV_VERSION" = "system" ]; then
+  PATH="$(remove_from_path "${DENV_ROOT}/shims")"
+  DENV_COMMAND_PATH="$(command -v "$DENV_COMMAND")"
+else
+  DENV_COMMAND_PATH="${DENV_ROOT}/versions/${DENV_VERSION}/${DENV_ENV_PATH}/bin/${DENV_COMMAND}"
+fi
+
+for script in $(denv-hooks which); do
+  source "$script"
+done
+
+if [ -x "$DENV_COMMAND_PATH" ]; then
+  echo "$DENV_COMMAND_PATH"
+else
+  echo "denv: $DENV_COMMAND: command not found" >&2
+
+  versions="$(denv-whence "$DENV_COMMAND" || true)"
+  if [ -n "$versions" ]; then
+    { echo
+      echo "The \`$1' command exists in these Ruby versions:"
+      echo "$versions" | sed 's/^/  /g'
+      echo
+    } >&2
+  fi
+
+  exit 127
+fi

@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+DENV_VERSION_FILE="$1"
+DENV_VERSION="$2"
+
+if [ -z "$DENV_VERSION" ] || [ -z "$DENV_VERSION_FILE" ]; then
+  echo "usage: denv write-version-file FILENAME VERSION" >&2
+  exit 1
+fi
+
+# Make sure the specified version is installed.
+denv-prefix "$DENV_VERSION" >/dev/null
+
+# Write the version out to disk.
+echo "$DENV_VERSION" > "$DENV_VERSION_FILE"

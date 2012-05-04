@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+# Provide denv completions
+if [ "$1" = "--complete" ]; then
+  echo --unset
+  echo system
+  exec denv-versions --bare
+fi
+
+version="$1"
+
+if [ -z "$version" ]; then
+  if [ -z "$DENV_VERSION" ]; then
+    echo "denv: no shell-specific version configured" >&2
+    exit 1
+  else
+    echo "echo \"\$DENV_VERSION\""
+    exit
+  fi
+fi
+
+if [ "$version" = "--unset" ]; then
+  echo "unset DENV_VERSION"
+  exit 1
+fi
+
+# Make sure the specified version is installed.
+denv-prefix "$version" >/dev/null
+
+echo "export DENV_VERSION=\"${version}\""

@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+# Provide denv completions
+if [ "$1" = "--complete" ]; then
+  echo exec
+  echo rehash
+  echo which
+  exit
+fi
+
+DENV_COMMAND="$1"
+if [ -z "$DENV_COMMAND" ]; then
+  echo "usage: denv hooks COMMAND" >&2
+  exit 1
+fi
+
+resolve_link() {
+  $(type -p greadlink readlink | head -1) $1
+}
+
+realpath() {
+  local cwd="$(pwd)"
+  local base="$(basename $1)"
+  local path="$1"
+
+  while [ -n "$path" ]; do
+    cd "${path%/*}"
+    local name="${path##*/}"
+    path="$(resolve_link "$name" || true)"
+  done
+
+  echo "$(pwd)/$base"
+  cd "$cwd"
+}
+
+shopt -s nullglob
+for path in ${DENV_HOOK_PATH//:/$'\n'}; do
+  for script in $path/"$DENV_COMMAND"/*.bash; do
+    echo $(realpath $script)
+  done
+done
+shopt -u nullglob

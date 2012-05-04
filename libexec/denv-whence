@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+# Provide denv completions
+if [ "$1" = "--complete" ]; then
+  echo --path
+  exec denv shims --short
+fi
+
+if [ "$1" = "--path" ]; then
+  print_paths="1"
+  shift
+else
+  print_paths=""
+fi
+
+whence() {
+  local command="$1"
+  denv-versions --bare | while read version; do
+    path="$(denv-prefix "$version")/bin/${command}"
+    if [ -x "$path" ]; then
+      [ "$print_paths" ] && echo "$path" || echo "$version"
+    fi
+  done
+}
+
+DENV_COMMAND="$1"
+if [ -z "$DENV_COMMAND" ]; then
+  echo "usage: denv whence [--path] COMMAND" >&2
+  exit 1
+fi
+
+result="$(whence "$DENV_COMMAND")"
+[ -n "$result" ] && echo "$result"

@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+# Provide denv completions
+if [ "$1" = "--complete" ]; then
+  echo --unset
+  echo system
+  exec denv-versions --bare
+fi
+
+DENV_VERSION="$1"
+DENV_VERSION_FILE=".denv-version"
+
+if [ "$DENV_VERSION" = "--unset" ]; then
+  rm -f "$DENV_VERSION_FILE"
+elif [ -n "$DENV_VERSION" ]; then
+  denv-version-file-write "$DENV_VERSION_FILE" "$DENV_VERSION"
+else
+  denv-version-file-read "$DENV_VERSION_FILE" ||
+  { echo "denv: no local version configured for this directory"
+    exit 1
+  } >&2
+fi

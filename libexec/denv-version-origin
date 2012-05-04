@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+if [ -n "$DENV_VERSION" ]; then
+  echo "DENV_VERSION environment variable"
+else
+  denv-version-file
+fi

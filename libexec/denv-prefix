@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+# Provide denv completions
+if [ "$1" = "--complete" ]; then
+  echo system
+  exec denv-versions --bare
+fi
+
+if [ -n "$1" ]; then
+  export DENV_VERSION="$1"
+elif [ -z "$DENV_VERSION" ]; then
+  DENV_VERSION="$(denv-version-name)"
+fi
+
+if [ "$DENV_VERSION" = "system" ]; then
+  RUBY_PATH="$(denv-which ruby)"
+  echo "${RUBY_PATH%/*}"
+  exit
+fi
+
+DENV_PREFIX_PATH="${DENV_ROOT}/versions/${DENV_VERSION}"
+if [ ! -d "$DENV_PREFIX_PATH" ]; then
+  echo "denv: version \`${DENV_VERSION}' not installed" >&2
+  exit 1
+fi
+
+echo "$DENV_PREFIX_PATH"

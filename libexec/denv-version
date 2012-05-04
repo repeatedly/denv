@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+echo "$(denv-version-name) (set by $(denv-version-origin))"

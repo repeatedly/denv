@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+if [ -z "$DENV_VERSION" ]; then
+  DENV_VERSION_FILE="$(denv-version-file)"
+  DENV_VERSION="$(denv-version-file-read "$DENV_VERSION_FILE" || true)"
+fi
+
+if [ -z "$DENV_VERSION" ] || [ "$DENV_VERSION" = "system" ]; then
+  echo "system"
+  exit
+fi
+
+DENV_VERSION_PATH="${DENV_ROOT}/versions/${DENV_VERSION}"
+
+if [ -d "$DENV_VERSION_PATH" ]; then
+  echo "$DENV_VERSION"
+else
+  echo "denv: version \`$DENV_VERSION' is not installed" >&2
+  exit 1
+fi
