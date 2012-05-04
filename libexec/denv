@@ -39,6 +39,19 @@ else
 fi
 export DENV_DIR
 
+if [ `uname` = "Darwin" ]; then
+  DENV_BIN_PATH_WITH_ENV="osx/bin"
+elif [ `uname` = "Linux" ]; then
+  if [ `uname -m` = "x86_64" ]; then
+    DENV_BIN_PATH_WITH_ENV="linux/bin64"
+  else
+    DENV_BIN_PATH_WITH_ENV="linux/bin32"
+  fi
+else
+  echo "denv: unsupported env: `uname`"
+  exit 1
+fi
+export DENV_BIN_PATH_WITH_ENV
 
 shopt -s nullglob
 
@@ -60,7 +73,7 @@ shopt -u nullglob
 command="$1"
 case "$command" in
 "" | "-h" | "--help" )
-  echo -e "denv 0.3.0\n$(denv-help)" >&2
+  echo -e "denv 0.1.1\n$(denv-help)" >&2
   ;;
 * )
   command_path="$(command -v "denv-$command" || true)"

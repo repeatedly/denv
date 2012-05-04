@@ -139,7 +139,7 @@ fi
 # Create the prototype shim, then register shims for all known binaries.
 create_prototype_shim
 shopt -s nullglob
-make_shims ../versions/*/$DENV_ENV_PATH/bin/*
+make_shims ../versions/*/${DENV_BIN_PATH_WITH_ENV}/*
 
 # Restore the previous working directory.
 cd "$OLDPWD"

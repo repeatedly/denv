@@ -58,7 +58,7 @@ if [ "$DENV_VERSION" = "system" ]; then
   PATH="$(remove_from_path "${DENV_ROOT}/shims")"
   DENV_COMMAND_PATH="$(command -v "$DENV_COMMAND")"
 else
-  DENV_COMMAND_PATH="${DENV_ROOT}/versions/${DENV_VERSION}/${DENV_ENV_PATH}/bin/${DENV_COMMAND}"
+  DENV_COMMAND_PATH="${DENV_ROOT}/versions/${DENV_VERSION}/${DENV_BIN_PATH_WITH_ENV}/${DENV_COMMAND}"
 fi
 
 for script in $(denv-hooks which); do
