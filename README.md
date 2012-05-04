@@ -54,10 +54,7 @@ denv is `~/.denv/shims` in your `$PATH`.
 
 ## <a name="section_2"></a> 2 Installation
 
-**Compatibility note**: denv is _incompatible_ with rvm. Things will
-  appear to work until you try to install a gem. The problem is that
-  rvm actually overrides the `gem` command with a shell function!
-  Please remove any references to rvm before using denv.
+**Compatibility note**: denv is _incompatible_ with dvm.
 
 ### <a name="section_2.1"></a> 2.1 Basic GitHub Checkout
 
@@ -265,9 +262,13 @@ tracker](https://github.com/repeatedly/denv/issues).
 
 ### <a name="section_4.1"></a> 4.1 Version History
 
+**0.1.1** (March 5, 2012)
+
+* Fix Linux environemnt bug.
+
 **0.1.0** (March 4, 2012)
 
-* Forked [rbenv](https://github.com/sstephenson/rbenv)
+* Fork [rbenv](https://github.com/sstephenson/rbenv)
 
 ### <a name="section_4.2"></a> 4.2 License
 
