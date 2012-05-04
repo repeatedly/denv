@@ -19,8 +19,7 @@ denv is a D version of rbenv. Thanks to @sstephenson.
    * [2 Installation](#section_2)
       * [2.1 Basic GitHub Checkout](#section_2.1)
          * [2.1.1 Upgrading](#section_2.1.1)
-      * [2.2 Homebrew on Mac OS X](#section_2.2)
-      * [2.3 Neckbeard Configuration](#section_2.3)
+      * [2.2 Neckbeard Configuration](#section_2.2)
    * [3 Usage](#section_3)
       * [3.1 denv global](#section_3.1)
       * [3.2 denv local](#section_3.2)
@@ -95,11 +94,13 @@ easy to fork and contribute any changes back upstream.
         $ unzip dmd.2.059.zip
         $ mv dmd2 ~/.denv/versions/2.059
 
+<!--
     The [d-build](https://github.com/repeatedly/d-build) project
     provides an `denv install` command that simplifies the process of
     installing new D versions to:
 
         $ denv install 2.059
+-->
 
 6. Rebuild the shim binaries. You should do this any time you install
    a new D binary (for example, when installing a new D version,
@@ -129,7 +130,7 @@ tag:
     v0.2.0
     $ git checkout v0.2.0
 
-### <a name="section_2.3"></a> 2.3 Neckbeard Configuration
+### <a name="section_2.2"></a> 2.2 Neckbeard Configuration
 
 Skip this section unless you must know what every line in your shell
 profile is doing.
