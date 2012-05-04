@@ -91,9 +91,9 @@ easy to fork and contribute any changes back upstream.
 5. Install D versions into `~/.denv/versions`. For example, to
    install dmd 2.059, download and unpack the source, then run:
 
-        $ ./configure --prefix=$HOME/.denv/versions/2.059
-        $ make
-        $ make install
+        $ wget https://github.com/downloads/D-Programming-Language/dmd/dmd.2.059.zip
+        $ unzip dmd.2.059.zip
+        $ mv dmd2 ~/.denv/versions/2.059
 
     The [d-build](https://github.com/repeatedly/d-build) project
     provides an `denv install` command that simplifies the process of
