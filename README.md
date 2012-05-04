@@ -41,8 +41,8 @@ example, you might have `~/.denv/versions/1.071` and
 `~/.denv/versions/2.059`.
 
 Each version is a working tree with its own binaries, like
-`~/.denv/versions/1.071/bin/ruby` and
-`~/.denv/versions/2.059/bin/irb`. denv makes _shim binaries_
+`~/.denv/versions/1.071/bin/dmd` and
+`~/.denv/versions/2.059/bin/rdmd`. denv makes _shim binaries_
 for every such binary across all installed versions of D.
 
 These shims are simple wrapper scripts that live in `~/.denv/shims`
@@ -202,7 +202,7 @@ Sets a shell-specific D version by setting the `DENV_VERSION`
 environment variable in your shell. This version overrides both
 project-specific versions and the global version.
 
-    $ denv shell jruby-1.6.4
+    $ denv shell 2.059
 
 When run without a version number, `denv shell` reports the current
 value of `DENV_VERSION`. You can also unset the shell version:
@@ -214,11 +214,11 @@ the installation instructions) in order to use this command. If you
 prefer not to use shell integration, you may simply set the
 `DENV_VERSION` variable yourself:
 
-    $ export DENV_VERSION=jruby-1.6.4
+    $ export DENV_VERSION=2.058
 
 ### <a name="section_3.4"></a> 3.4 denv versions
 
-Lists all Ruby versions known to denv, and shows an asterisk next to
+Lists all D versions known to denv, and shows an asterisk next to
 the currently active version.
 
     $ denv versions
@@ -231,7 +231,7 @@ NOTE: Now, gdc and ldc is not supported.
 
 ### <a name="section_3.5"></a> 3.5 denv version
 
-Displays the currently active Ruby version, along with information on
+Displays the currently active D version, along with information on
 how it was set.
 
     $ denv version
@@ -239,9 +239,9 @@ how it was set.
 
 ### <a name="section_3.6"></a> 3.6 denv rehash
 
-Installs shims for all Ruby binaries known to denv (i.e.,
-`~/.denv/versions/*/bin/*`). Run this command after you install a new
-version of Ruby, or install a gem that provides binaries.
+Installs shims for all D binaries known to denv (i.e.,
+`~/.denv/versions/*/os/bin/*`). Run this command after you install a new
+version of D, or install a gem that provides binaries.
 
     $ denv rehash
 
@@ -250,8 +250,8 @@ version of Ruby, or install a gem that provides binaries.
 Displays the full path to the binary that denv will execute when you
 run the given command.
 
-    $ denv which irb
-    /Users/sam/.denv/versions/1.9.2-p290/bin/irb
+    $ denv which dmd
+    /Users/sam/.denv/versions/2.059/osx/bin/dmd
 
 ## <a name="section_4"></a> 4 Development
 
