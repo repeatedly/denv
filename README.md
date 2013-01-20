@@ -28,6 +28,8 @@ denv is a D version of rbenv. Thanks to @sstephenson.
       * [3.5 denv version](#section_3.5)
       * [3.6 denv rehash](#section_3.6)
       * [3.7 denv which](#section_3.7)
+      * [3.8 denv install](#section_3.8)
+      * [3.9 denv uninstall](#section_3.9)
    * [4 Development](#section_4)
       * [4.1 Version History](#section_4.1)
       * [4.2 License](#section_4.2)
@@ -251,6 +253,24 @@ run the given command.
     $ denv which dmd
     /Users/sam/.denv/versions/2.059/osx/bin/dmd
 
+### <a name="section_3.8"></a> 3.8 denv install
+
+Install a D version.
+
+    $ denv install 2.061
+    Downloading 2.061...
+    2013-01-20 18:02:24 URL:http://downloads.dlang.org.s3-website-us-east-1.amazonaws.com/releases/2013/dmd.2.061.zip [31601020/31601020] -> "-" [1]
+    Installing 2.061 to /Users/sam/.denv/versions/2.061
+
+Currenlty, support compiliers are only dmd. gdc and ldc will be added.
+
+### <a name="section_3.9"></a> 3.9 denv uninstall 
+
+Uninstall a specific D version.
+
+    $ denv uninstall 2.061
+    denv: remove /Users/repeatedly/.denv/versions/2.061? y
+
 ## <a name="section_4"></a> 4 Development
 
 The denv source code is [hosted on
@@ -261,6 +281,10 @@ Please feel free to submit pull requests and file bugs on the [issue
 tracker](https://github.com/repeatedly/denv/issues).
 
 ### <a name="section_4.1"></a> 4.1 Version History
+
+**0.1.2** (January 22, 2013)
+
+* Add `install` and `uninstall`.
 
 **0.1.1** (March 5, 2012)
 
