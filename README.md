@@ -269,7 +269,7 @@ Currenlty, support compiliers are only dmd. gdc and ldc will be added.
 Uninstall a specific D version.
 
     $ denv uninstall 2.061
-    denv: remove /Users/repeatedly/.denv/versions/2.061? y
+    denv: remove /Users/sam/.denv/versions/2.061? y
 
 ## <a name="section_4"></a> 4 Development
 
