@@ -26,6 +26,8 @@ Some useful denv commands are:
    global        Set or show the global D version
    local         Set or show the local directory-specific D version
    shell         Set or show the shell-specific D version
+   install       Install a D version
+   uninstall     Uninstall a specific D version
    version       Show the current D version
    versions      List all D versions known by denv
    which         Show the full path for the given D command

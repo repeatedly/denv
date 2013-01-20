@@ -1,0 +1,1 @@
+install_dmd_package "2.060" "http://ftp.digitalmars.com/dmd.2.060.zip"

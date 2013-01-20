@@ -1,0 +1,124 @@
+#!/usr/bin/env bash
+
+# porting from rbenv-install
+
+set -e
+[ -n "$DENV_DEBUG" ] && set -x
+
+if [ -z "$DENV_ROOT" ]; then
+  DENV_ROOT="${HOME}/.rbenv"
+fi
+
+# Load shared library functions
+eval "$(denv-util --lib)"
+
+http() {
+  local method="$1"
+  local url="$2"
+  [ -n "$url" ] || return 1
+
+  if type wget &>/dev/null; then
+    "http_${method}_wget" "$url"
+  elif type curl &>/dev/null; then
+    "http_${method}_curl" "$url"
+  else
+    echo "error: please install \`curl\` or \`wget\` and try again" >&2
+    exit 1
+  fi
+}
+
+http_get_curl() {
+  curl -sSLf "$1"
+}
+
+http_get_wget() {
+  wget -nv -O- "$1"
+}
+
+fetch_zip() {
+  local package_name="$1"
+  local package_url="$2"
+  local package_filename="${package_name}.zip"
+
+  rm -rf "$package_filename"
+  echo "Downloading ${package_name}..." >&2
+  { http get "$package_url" > "$package_filename"
+  } || return 1
+
+  {
+    unzip "$package_filename" > /dev/null
+    rm -f "$package_filename"
+  } || return 1
+}
+
+install_dmd_package() {
+    local package_name="$1"
+    local package_url="$2"
+    local package_path="$PREFIX/$package_name"
+
+    fetch_zip "$package_name" "$package_url"    
+    rm -rf "$package_path"
+
+    echo "Installing ${package_name} to ${package_path}"
+    mv dmd2 "$package_name"
+    mv "$package_name" "$PREFIX"
+}
+
+# TODO: build from source
+# TODO: support gdc and ldc
+
+usage() {
+  # We can remove the sed fallback once rbenv 0.4.0 is widely available.
+  denv-help install 2>/dev/null || sed -ne '/^#/!q;s/.//;s/.//;1,4d;p' < "$0"
+  [ -z "$1" ] || exit "$1"
+}
+
+list_definitions() {
+  { for definition in "${DENV_ROOT}/share/d-build/"*; do
+      echo "${definition##*/}"
+    done
+  } | sort
+}
+
+parse_options "$@"
+for option in "${OPTIONS[@]}"; do
+  case "$option" in
+  "h" | "help" )
+    usage 0
+    ;;
+  "l" | "list" )
+    echo "Available versions:"
+    list_definitions | sed 's/^/  /'
+    exit
+    ;;
+  "v" | "verbose" )
+    VERBOSE="-v"
+    ;;
+  * )
+    usage 1
+    ;;
+  esac
+done
+
+DEFINITION="${ARGUMENTS[0]}"
+if [ -z "$DEFINITION" ]; then
+  usage 1
+elif [ ! -e "$DEFINITION" ]; then
+  BUILTIN_DEFINITION="${DENV_ROOT}/share/d-build/${DEFINITION}"
+  if [ -e "$BUILTIN_DEFINITION" ]; then
+    DEFINITION="$BUILTIN_DEFINITION"
+  else
+    echo "denv install: definition not found: ${DEFINITION}" >&2
+    exit 1
+  fi
+fi
+
+for script in $(denv-hooks install); do
+  source "$script"
+done
+
+VERSION_NAME="${DEFINITION##*/}"
+PREFIX="${DENV_ROOT}/versions"
+
+source "$DEFINITION"
+denv rehash

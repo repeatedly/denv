@@ -1,0 +1,52 @@
+#!/usr/bin/env bash
+
+# porting from rbenv-uninstall
+
+set -e
+
+# Provide denv completions
+if [ "$1" = "--complete" ]; then
+  exec denv versions --bare
+fi
+
+if [ -z "$DENV_ROOT" ]; then
+  DENV_ROOT="${HOME}/.rbenv"
+fi
+
+unset FORCE
+if [ "$1" = "-f" ]; then
+  FORCE=true
+  shift
+fi
+
+DEFINITION="$1"
+case "$DEFINITION" in
+"" | -* )
+  # We can remove the sed fallback once rbenv 0.4.0 is widely available.
+  { denv-help uninstall 2>/dev/null ||
+    sed -ne '/^#/!q;s/.\{1,2\}//;1,4d;p' < "$0"
+  } >&2
+  exit 1
+  ;;
+esac
+
+VERSION_NAME="${DEFINITION##*/}"
+PREFIX="${DENV_ROOT}/versions/${VERSION_NAME}"
+
+if [ -z "$FORCE" ]; then
+  if [ ! -d "$PREFIX" ]; then
+    echo "denv: version \`$VERSION_NAME' not installed" >&2
+    exit 1
+  fi
+
+  read -p "denv: remove $PREFIX? "
+  case "$REPLY" in
+  y* | Y* ) ;;
+  * ) exit 1 ;;
+  esac
+fi
+
+if [ -d "$PREFIX" ]; then
+  rm -rf "$PREFIX"
+  denv rehash
+fi
