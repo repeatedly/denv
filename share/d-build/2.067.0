@@ -1,0 +1,1 @@
+install_dmd_package "2.067.0" "http://downloads.dlang.org.s3-website-us-east-1.amazonaws.com/releases/2015/dmd.2.067.0.zip"
