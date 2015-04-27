@@ -51,6 +51,22 @@ fetch_zip() {
   } || return 1
 }
 
+fetch_tar_xz() {
+  local package_name="$1"
+  local package_url="$2"
+  local package_filename="${package_name}.tar.xz"
+
+  rm -rf "$package_filename"
+  echo "Downloading ${package_name}..." >&2
+  { http get "$package_url" > "$package_filename"
+  } || return 1
+
+  {
+    tar xf "$package_filename" > /dev/null
+    rm -f "$package_filename"
+  } || return 1
+}
+
 install_dmd_package() {
     local package_name="$1"
     local package_url="$2"
@@ -64,8 +80,33 @@ install_dmd_package() {
     mv "$package_name" "$PREFIX"
 }
 
+install_ldc_package() {
+    local package_name="$1"
+    local package_url="$2"
+    local package_path="$PREFIX/ldc-$package_name"
+    local arch_bin=""
+
+    fetch_tar_xz "$package_name" "$package_url"
+    rm -rf "$package_path"
+
+    if [ "$os" = "osx" ]; then
+        arch_bin="bin"
+    elif [ "$os" = "linux" ]; then
+        if [ "$arch" = "x86_64" ]; then
+            arch_bin="bin64"
+        else
+            arch_bin="bin32"
+        fi
+    fi
+    echo "Installing ${package_name} to ${package_path}"
+    mv "ldc2-${package_name}-${os}-${arch}" "ldc-$package_name"
+    mv "ldc-$package_name" "$PREFIX"
+    mkdir -p "$package_path/$os"
+    ln -s "$package_path/bin" "$package_path/$os/${arch_bin}"
+}
+
 # TODO: build from source
-# TODO: support gdc and ldc
+# TODO: support gdc
 
 usage() {
   # We can remove the sed fallback once rbenv 0.4.0 is widely available.
@@ -111,6 +152,24 @@ elif [ ! -e "$DEFINITION" ]; then
     echo "denv install: definition not found: ${DEFINITION}" >&2
     exit 1
   fi
+fi
+
+# for ldc
+os=""
+arch=""
+if [ `uname` = "Darwin" ]; then
+  os="osx"
+  arch="x86_64"
+elif [ `uname` = "Linux" ]; then
+  os="linux"
+  if [ `uname -m` = "x86_64" ]; then
+    arch="x86_64"
+  else
+    arch="x86"
+  fi
+else
+  echo "denv: unsupported env: `uname`"
+  exit 1
 fi
 
 for script in $(denv-hooks install); do
