@@ -227,7 +227,7 @@ the currently active version.
       gdc-2.x
       ldc-x.x
 
-NOTE: Now, gdc and ldc is not supported.
+NOTE: Now, gdc is not supported.
 
 ### <a name="section_3.5"></a> 3.5 denv version
 
@@ -262,7 +262,7 @@ Install a D version.
     2013-01-20 18:02:24 URL:http://downloads.dlang.org.s3-website-us-east-1.amazonaws.com/releases/2013/dmd.2.061.zip [31601020/31601020] -> "-" [1]
     Installing 2.061 to /Users/sam/.denv/versions/2.061
 
-Currenlty, support compiliers are only dmd. gdc and ldc will be added.
+Currenlty, support compiliers are dmd and ldc. gdc will be added.
 
 ### <a name="section_3.9"></a> 3.9 denv uninstall 
 
