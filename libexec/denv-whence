@@ -18,7 +18,7 @@ fi
 whence() {
   local command="$1"
   denv-versions --bare | while read version; do
-    path="$(denv-prefix "$version")/bin/${command}"
+    path="$(denv-prefix "$version")/$DENV_BIN_PATH_WITH_ENV/${command}"
     if [ -x "$path" ]; then
       [ "$print_paths" ] && echo "$path" || echo "$version"
     fi

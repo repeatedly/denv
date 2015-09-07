@@ -73,7 +73,7 @@ else
   versions="$(denv-whence "$DENV_COMMAND" || true)"
   if [ -n "$versions" ]; then
     { echo
-      echo "The \`$1' command exists in these Ruby versions:"
+      echo "The \`$1' command exists in these D versions:"
       echo "$versions" | sed 's/^/  /g'
       echo
     } >&2
