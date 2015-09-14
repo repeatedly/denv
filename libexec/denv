@@ -73,7 +73,7 @@ shopt -u nullglob
 command="$1"
 case "$command" in
 "" | "-h" | "--help" )
-  echo -e "denv 0.1.1\n$(denv-help)" >&2
+  echo -e "denv 0.1.2\n$(denv-help)" >&2
   ;;
 * )
   command_path="$(command -v "denv-$command" || true)"
