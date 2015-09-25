@@ -72,8 +72,9 @@ install_dmd_package() {
     local package_url="$2"
     local package_path="$PREFIX/$package_name"
 
-    fetch_zip "$package_name" "$package_url"    
+    fetch_zip "$package_name" "$package_url"
     rm -rf "$package_path"
+    mkdir -p "$PREFIX"
 
     echo "Installing ${package_name} to ${package_path}"
     mv dmd2 "$package_name"
@@ -88,6 +89,7 @@ install_ldc_package() {
 
     fetch_tar_xz "$package_name" "$package_url"
     rm -rf "$package_path"
+    mkdir -p "$PREFIX"
 
     if [ "$os" = "osx" ]; then
         arch_bin="bin"
