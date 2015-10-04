@@ -86,12 +86,9 @@ easy to fork and contribute any changes back upstream.
 
         $ exec $SHELL
 
-5. Install D versions into `~/.denv/versions`. For example, to
-   install dmd 2.059, download and unpack the source, then run:
+5. Install D versions by using `denv install`.
 
-        $ wget https://github.com/downloads/D-Programming-Language/dmd/dmd.2.059.zip
-        $ unzip dmd.2.059.zip
-        $ mv dmd2 ~/.denv/versions/2.059
+        $ denv install 2.059
 
 <!--
     The [d-build](https://github.com/repeatedly/d-build) project
@@ -100,12 +97,6 @@ easy to fork and contribute any changes back upstream.
 
         $ denv install 2.059
 -->
-
-6. Rebuild the shim binaries. You should do this any time you install
-   a new D binary (for example, when installing a new D version,
-   or when installing a gem that provides a binary).
-
-        $ denv rehash
 
 #### <a name="section_2.1.1"></a> 2.1.1 Upgrading
 
