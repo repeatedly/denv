@@ -38,12 +38,12 @@ denv is a D version of rbenv. Thanks to @sstephenson.
 
 denv operates on the per-user directory `~/.denv`. Version names in
 denv correspond to subdirectories of `~/.denv/versions`. For
-example, you might have `~/.denv/versions/1.071` and
-`~/.denv/versions/2.059`.
+example, you might have `~/.denv/versions/dmd-1.071` and
+`~/.denv/versions/dmd-2.059`.
 
 Each version is a working tree with its own binaries, like
-`~/.denv/versions/1.071/bin/dmd` and
-`~/.denv/versions/2.059/bin/rdmd`. denv makes _shim binaries_
+`~/.denv/versions/dmd-1.071/bin/dmd` and
+`~/.denv/versions/dmd-2.059/bin/rdmd`. denv makes _shim binaries_
 for every such binary across all installed versions of D.
 
 These shims are simple wrapper scripts that live in `~/.denv/shims`
@@ -86,12 +86,9 @@ easy to fork and contribute any changes back upstream.
 
         $ exec $SHELL
 
-5. Install D versions into `~/.denv/versions`. For example, to
-   install dmd 2.059, download and unpack the source, then run:
+5. Install D versions by using `denv install`.
 
-        $ wget https://github.com/downloads/D-Programming-Language/dmd/dmd.2.059.zip
-        $ unzip dmd.2.059.zip
-        $ mv dmd2 ~/.denv/versions/2.059
+        $ denv install dmd-2.059
 
 <!--
     The [d-build](https://github.com/repeatedly/d-build) project
@@ -100,12 +97,6 @@ easy to fork and contribute any changes back upstream.
 
         $ denv install 2.059
 -->
-
-6. Rebuild the shim binaries. You should do this any time you install
-   a new D binary (for example, when installing a new D version,
-   or when installing a gem that provides a binary).
-
-        $ denv rehash
 
 #### <a name="section_2.1.1"></a> 2.1.1 Upgrading
 
@@ -173,7 +164,7 @@ the version name to the `~/.denv/version` file. This version can be
 overridden by a per-project `.denv-version` file, or by setting the
 `DENV_VERSION` environment variable.
 
-    $ denv global 2.059
+    $ denv global dmd-2.059
 
 The special version name `system` tells denv to use the system D
 (detected by searching your `$PATH`).
@@ -189,7 +180,7 @@ overrides the global, and can be overridden itself by setting the
 `DENV_VERSION` environment variable or with the `denv shell`
 command.
 
-    $ denv local 2.058
+    $ denv local dmd-2.058
 
 When run without a version number, `denv local` reports the currently
 configured local version. You can also unset the local version:
@@ -202,7 +193,7 @@ Sets a shell-specific D version by setting the `DENV_VERSION`
 environment variable in your shell. This version overrides both
 project-specific versions and the global version.
 
-    $ denv shell 2.059
+    $ denv shell dmd-2.059
 
 When run without a version number, `denv shell` reports the current
 value of `DENV_VERSION`. You can also unset the shell version:
@@ -214,7 +205,7 @@ the installation instructions) in order to use this command. If you
 prefer not to use shell integration, you may simply set the
 `DENV_VERSION` variable yourself:
 
-    $ export DENV_VERSION=2.058
+    $ export DENV_VERSION=dmd-2.058
 
 ### <a name="section_3.4"></a> 3.4 denv versions
 
@@ -222,8 +213,8 @@ Lists all D versions known to denv, and shows an asterisk next to
 the currently active version.
 
     $ denv versions
-      2.058
-    * 2.059 (set by /Users/sam/.denv/global)
+      dmd-2.058
+    * dmd-2.059 (set by /Users/sam/.denv/global)
       gdc-2.x
       ldc-x.x
 
@@ -235,7 +226,7 @@ Displays the currently active D version, along with information on
 how it was set.
 
     $ denv version
-    2.059 (set by /Volumes/37signals/basecamp/.denv-version)
+    dmd-2.059 (set by /Volumes/37signals/basecamp/.denv-version)
 
 ### <a name="section_3.6"></a> 3.6 denv rehash
 
@@ -251,16 +242,16 @@ Displays the full path to the binary that denv will execute when you
 run the given command.
 
     $ denv which dmd
-    /Users/sam/.denv/versions/2.059/osx/bin/dmd
+    /Users/sam/.denv/versions/dmd-2.059/osx/bin/dmd
 
 ### <a name="section_3.8"></a> 3.8 denv install
 
 Install a D version.
 
-    $ denv install 2.061
+    $ denv install dmd-2.061
     Downloading 2.061...
     2013-01-20 18:02:24 URL:http://downloads.dlang.org.s3-website-us-east-1.amazonaws.com/releases/2013/dmd.2.061.zip [31601020/31601020] -> "-" [1]
-    Installing 2.061 to /Users/sam/.denv/versions/2.061
+    Installing 2.061 to /Users/sam/.denv/versions/dmd-2.061
 
 Currenlty, support compiliers are dmd and ldc. gdc will be added.
 
@@ -268,8 +259,8 @@ Currenlty, support compiliers are dmd and ldc. gdc will be added.
 
 Uninstall a specific D version.
 
-    $ denv uninstall 2.061
-    denv: remove /Users/sam/.denv/versions/2.061? y
+    $ denv uninstall dmd-2.061
+    denv: remove /Users/sam/.denv/versions/dmd-2.061? y
 
 ## <a name="section_4"></a> 4 Development
 
