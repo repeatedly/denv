@@ -70,14 +70,14 @@ fetch_tar_xz() {
 install_dmd_package() {
     local package_name="$1"
     local package_url="$2"
-    local package_path="$PREFIX/$package_name"
+    local package_path="$PREFIX/dmd-$package_name"
 
-    fetch_zip "$package_name" "$package_url"    
+    fetch_zip "$package_name" "$package_url"
     rm -rf "$package_path"
 
     echo "Installing ${package_name} to ${package_path}"
-    mv dmd2 "$package_name"
-    mv "$package_name" "$PREFIX"
+    mv dmd2 "dmd-$package_name"
+    mv "dmd-$package_name" "$PREFIX"
 }
 
 install_ldc_package() {
