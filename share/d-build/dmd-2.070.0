@@ -1,0 +1,1 @@
+install_dmd_package "2.070.0" "http://downloads.dlang.org/releases/2.x/2.070.0/dmd.2.070.0.zip"
