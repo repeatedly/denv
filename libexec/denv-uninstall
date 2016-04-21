@@ -10,7 +10,7 @@ if [ "$1" = "--complete" ]; then
 fi
 
 if [ -z "$DENV_ROOT" ]; then
-  DENV_ROOT="${HOME}/.rbenv"
+  DENV_ROOT="${HOME}/.denv"
 fi
 
 unset FORCE
