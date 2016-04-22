@@ -6,7 +6,7 @@ set -e
 [ -n "$DENV_DEBUG" ] && set -x
 
 if [ -z "$DENV_ROOT" ]; then
-  DENV_ROOT="${HOME}/.rbenv"
+  DENV_ROOT="${HOME}/.denv"
 fi
 
 # Load shared library functions
