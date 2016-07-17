@@ -1,0 +1,1 @@
+install_ldc_package "1.0.0" "https://github.com/ldc-developers/ldc/releases/download/v1.0.0/ldc2-1.0.0-$os-$arch.tar.xz"
